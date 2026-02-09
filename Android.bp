@@ -1,0 +1,80 @@
+// external/boost/Android.bp
+// Boost libraries for AOSP (Phase 4: vsomeip integration)
+
+package {
+    default_applicable_licenses: ["external_boost_license"],
+}
+
+license {
+    name: "external_boost_license",
+    visibility: [":__subpackages__"],
+    license_kinds: [
+        "SPDX-license-identifier-BSL-1.0",
+    ],
+    license_text: [
+        "LICENSE_1_0.txt",
+    ],
+}
+
+// Boost headers (header-only libraries)
+cc_library_headers {
+    name: "libboost_headers",
+    export_include_dirs: ["include"],
+    vendor_available: true,
+    product_available: true,
+    host_supported: true,
+}
+
+// TODO: Add boost::system, boost::thread, boost::filesystem
+// after extracting Boost sources
+
+/*
+cc_library_static {
+    name: "libboost_system",
+    srcs: [
+        "libs/system/src/error_code.cpp",
+    ],
+    header_libs: ["libboost_headers"],
+    export_header_lib_headers: ["libboost_headers"],
+    cflags: [
+        "-Wno-unused-parameter",
+        "-DBOOST_SYSTEM_NO_DEPRECATED",
+    ],
+    cpp_std: "c++17",
+    vendor_available: true,
+    product_available: true,
+}
+
+cc_library_static {
+    name: "libboost_thread",
+    srcs: [
+        "libs/thread/src/*.cpp",
+    ],
+    header_libs: ["libboost_headers"],
+    export_header_lib_headers: ["libboost_headers"],
+    shared_libs: ["libboost_system"],
+    cflags: [
+        "-Wno-unused-parameter",
+        "-DBOOST_THREAD_PROVIDES_FUTURE",
+    ],
+    cpp_std: "c++17",
+    vendor_available: true,
+    product_available: true,
+}
+
+cc_library_static {
+    name: "libboost_filesystem",
+    srcs: [
+        "libs/filesystem/src/*.cpp",
+    ],
+    header_libs: ["libboost_headers"],
+    export_header_lib_headers: ["libboost_headers"],
+    shared_libs: ["libboost_system"],
+    cflags: [
+        "-Wno-unused-parameter",
+    ],
+    cpp_std: "c++17",
+    vendor_available: true,
+    product_available: true,
+}
+*/
