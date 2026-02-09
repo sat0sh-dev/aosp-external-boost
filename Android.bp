@@ -25,56 +25,73 @@ cc_library_headers {
     host_supported: true,
 }
 
-// TODO: Add boost::system, boost::thread, boost::filesystem
-// after extracting Boost sources
+// Common defaults for Boost libraries
+cc_defaults {
+    name: "boost_defaults",
+    header_libs: ["libboost_headers"],
+    export_header_lib_headers: ["libboost_headers"],
+    cflags: [
+        "-Wno-unused-parameter",
+        "-Wno-unused-variable",
+        "-Wno-unused-local-typedef",
+        "-fexceptions",
+    ],
+    cppflags: [
+        "-std=c++17",
+    ],
+    vendor_available: true,
+    product_available: true,
+}
 
-/*
+// boost::system library
 cc_library_static {
     name: "libboost_system",
+    defaults: ["boost_defaults"],
     srcs: [
         "libs/system/src/error_code.cpp",
     ],
-    header_libs: ["libboost_headers"],
-    export_header_lib_headers: ["libboost_headers"],
     cflags: [
-        "-Wno-unused-parameter",
         "-DBOOST_SYSTEM_NO_DEPRECATED",
     ],
-    cpp_std: "c++17",
-    vendor_available: true,
-    product_available: true,
 }
 
+// boost::thread library (pthread implementation for Android)
 cc_library_static {
     name: "libboost_thread",
+    defaults: ["boost_defaults"],
     srcs: [
-        "libs/thread/src/*.cpp",
+        "libs/thread/src/future.cpp",
+        "libs/thread/src/tss_null.cpp",
+        "libs/thread/src/pthread/thread.cpp",
+        "libs/thread/src/pthread/once.cpp",
     ],
-    header_libs: ["libboost_headers"],
-    export_header_lib_headers: ["libboost_headers"],
-    shared_libs: ["libboost_system"],
+    static_libs: ["libboost_system"],
     cflags: [
-        "-Wno-unused-parameter",
         "-DBOOST_THREAD_PROVIDES_FUTURE",
+        "-DBOOST_THREAD_POSIX",
+        "-DBOOST_HAS_PTHREADS",
     ],
-    cpp_std: "c++17",
-    vendor_available: true,
-    product_available: true,
+    shared_libs: ["libc"],
 }
 
+// boost::filesystem library
 cc_library_static {
     name: "libboost_filesystem",
+    defaults: ["boost_defaults"],
     srcs: [
-        "libs/filesystem/src/*.cpp",
+        "libs/filesystem/src/codecvt_error_category.cpp",
+        "libs/filesystem/src/directory.cpp",
+        "libs/filesystem/src/exception.cpp",
+        "libs/filesystem/src/operations.cpp",
+        "libs/filesystem/src/path.cpp",
+        "libs/filesystem/src/path_traits.cpp",
+        "libs/filesystem/src/portability.cpp",
+        "libs/filesystem/src/unique_path.cpp",
+        "libs/filesystem/src/utf8_codecvt_facet.cpp",
     ],
-    header_libs: ["libboost_headers"],
-    export_header_lib_headers: ["libboost_headers"],
-    shared_libs: ["libboost_system"],
+    static_libs: ["libboost_system"],
+    local_include_dirs: ["libs/filesystem/src"],
     cflags: [
-        "-Wno-unused-parameter",
+        "-DBOOST_FILESYSTEM_NO_CXX20_ATOMIC_REF",
     ],
-    cpp_std: "c++17",
-    vendor_available: true,
-    product_available: true,
 }
-*/
