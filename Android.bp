@@ -69,7 +69,7 @@ cc_library_static {
     cflags: [
         "-DBOOST_THREAD_PROVIDES_FUTURE",
         "-DBOOST_THREAD_POSIX",
-        "-DBOOST_HAS_PTHREADS",
+        "-Wno-non-virtual-dtor",
     ],
     shared_libs: ["libc"],
 }
